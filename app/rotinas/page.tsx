@@ -26,7 +26,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { Empty, EmptyIcon, EmptyTitle, EmptyDescription } from '@/components/ui/empty'
+import { Empty, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty'
 import { 
   getRoutines, 
   saveRoutine, 
@@ -176,9 +176,9 @@ export default function RoutinesPage() {
 
       {routines.length === 0 ? (
         <Empty className="py-12">
-          <EmptyIcon>
+          <EmptyMedia>
             <ListChecks className="h-10 w-10" />
-          </EmptyIcon>
+          </EmptyMedia>
           <EmptyTitle>Nenhuma rotina criada</EmptyTitle>
           <EmptyDescription>
             Crie rotinas para iniciar treinos mais rapidamente

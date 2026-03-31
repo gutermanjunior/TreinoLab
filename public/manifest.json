@@ -1,22 +1,52 @@
 {
   "name": "Registro de Força",
-  "short_name": "Registro de Força",
+  "short_name": "Força",
   "description": "Registre seus treinos de musculação, acompanhe seu progresso e bata seus recordes pessoais.",
   "start_url": "/",
+  "id": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "background_color": "#09090b",
   "theme_color": "#09090b",
   "orientation": "portrait",
+  "scope": "/",
+  "lang": "pt-BR",
+  "categories": ["fitness", "health", "lifestyle"],
   "icons": [
     {
       "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Novo Treino",
+      "short_name": "Treino",
+      "description": "Iniciar um novo treino",
+      "url": "/",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Exercícios",
+      "short_name": "Exercícios",
+      "description": "Ver biblioteca de exercícios",
+      "url": "/exercicios",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }

@@ -5,10 +5,10 @@ import { Trophy, TrendingUp, Dumbbell, Calendar, Award } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Empty, EmptyIcon, EmptyTitle, EmptyDescription } from '@/components/ui/empty'
-import { 
-  getWorkouts, 
-  getPersonalRecords, 
+import { Empty, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty'
+import {
+  getWorkouts,
+  getPersonalRecords,
   getWeekStats,
   formatDuration,
 } from '@/lib/storage'
@@ -31,8 +31,8 @@ export default function StatsPage() {
   // Agrupa PRs por exercício (pega apenas o melhor de cada)
   const bestPRsByExercise = personalRecords.reduce((acc, pr) => {
     const existing = acc.get(pr.exerciseId)
-    if (!existing || pr.weight > existing.weight || 
-        (pr.weight === existing.weight && pr.reps > existing.reps)) {
+    if (!existing || pr.weight > existing.weight ||
+      (pr.weight === existing.weight && pr.reps > existing.reps)) {
       acc.set(pr.exerciseId, pr)
     }
     return acc
@@ -45,7 +45,7 @@ export default function StatsPage() {
   const thisMonth = new Date()
   thisMonth.setDate(1)
   thisMonth.setHours(0, 0, 0, 0)
-  
+
   const monthWorkouts = workouts.filter(w => new Date(w.date) >= thisMonth)
   const monthVolume = monthWorkouts.reduce((acc, w) => {
     return acc + w.exercises.reduce((exAcc, ex) => {
@@ -106,8 +106,8 @@ export default function StatsPage() {
             </div>
             <div>
               <p className="text-2xl font-bold">
-                {monthVolume >= 1000 
-                  ? `${(monthVolume / 1000).toFixed(1)}t` 
+                {monthVolume >= 1000
+                  ? `${(monthVolume / 1000).toFixed(1)}t`
                   : `${monthVolume}kg`
                 }
               </p>
@@ -151,9 +151,9 @@ export default function StatsPage() {
         <TabsContent value="prs" className="mt-4">
           {sortedPRs.length === 0 ? (
             <Empty className="py-12">
-              <EmptyIcon>
+              <EmptyMedia>
                 <Trophy className="h-10 w-10" />
-              </EmptyIcon>
+              </EmptyMedia>
               <EmptyTitle>Nenhum recorde ainda</EmptyTitle>
               <EmptyDescription>
                 Complete seus treinos para registrar seus PRs
@@ -174,7 +174,7 @@ export default function StatsPage() {
                       if (!exercise) return null
 
                       return (
-                        <div 
+                        <div
                           key={pr.id}
                           className="flex items-center justify-between"
                         >

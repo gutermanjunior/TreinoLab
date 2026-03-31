@@ -20,7 +20,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
-import { Empty, EmptyIcon, EmptyTitle, EmptyDescription } from '@/components/ui/empty'
+import { Empty, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty'
 import { 
   getWorkouts, 
   deleteWorkout, 
@@ -86,9 +86,9 @@ export default function HistoryPage() {
 
       {workouts.length === 0 ? (
         <Empty className="py-12">
-          <EmptyIcon>
+          <EmptyMedia>
             <Calendar className="h-10 w-10" />
-          </EmptyIcon>
+          </EmptyMedia>
           <EmptyTitle>Nenhum treino registrado</EmptyTitle>
           <EmptyDescription>
             Complete seu primeiro treino para vê-lo aqui
