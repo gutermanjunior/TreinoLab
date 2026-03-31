@@ -1,4 +1,4 @@
-const CACHE_NAME = 'registro-forca-v1';
+const CACHE_NAME = 'treinolab-v1';
 const urlsToCache = [
   '/',
   '/exercicios',

@@ -1,6 +1,6 @@
 {
-  "name": "Registro de Força",
-  "short_name": "Força",
+  "name": "TreinoLab",
+  "short_name": "TreinoLab",
   "description": "Registre seus treinos de musculação, acompanhe seu progresso e bata seus recordes pessoais.",
   "start_url": "/",
   "id": "/",

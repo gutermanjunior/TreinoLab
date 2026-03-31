@@ -79,7 +79,7 @@ export default function RoutinesPage() {
       routineId: routine.id,
     }
     
-    localStorage.setItem('registro-forca-current', JSON.stringify(newWorkout))
+    localStorage.setItem('treinolab-current', JSON.stringify(newWorkout))
     router.push(`/treino/${newWorkout.id}`)
   }
 

@@ -56,7 +56,7 @@ export default function HomePage() {
       completed: false,
     }
     
-    localStorage.setItem('registro-forca-current', JSON.stringify(newWorkout))
+    localStorage.setItem('treinolab-current', JSON.stringify(newWorkout))
     router.push(`/treino/${newWorkout.id}`)
   }
 
@@ -88,7 +88,7 @@ export default function HomePage() {
       routineId: routine.id,
     }
     
-    localStorage.setItem('registro-forca-current', JSON.stringify(newWorkout))
+    localStorage.setItem('treinolab-current', JSON.stringify(newWorkout))
     router.push(`/treino/${newWorkout.id}`)
   }
 
@@ -104,7 +104,7 @@ export default function HomePage() {
     <div className="flex flex-col gap-6 p-4">
       {/* Header */}
       <header className="pt-2">
-        <h1 className="text-2xl font-bold">Registro de Força</h1>
+        <h1 className="text-2xl font-bold">TreinoLab</h1>
         <p className="text-muted-foreground">
           {new Date().toLocaleDateString('pt-BR', { 
             weekday: 'long', 

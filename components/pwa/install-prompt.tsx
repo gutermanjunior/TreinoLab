@@ -90,7 +90,7 @@ export function InstallPrompt() {
 
           <div className="flex-1 pr-6">
             <h3 className="font-semibold text-foreground">
-              Instalar Registro de Forca
+              Instalar TreinoLab
             </h3>
             <p className="text-sm text-muted-foreground mt-1">
               {isIOS

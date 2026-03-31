@@ -11,13 +11,13 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Registro de Força',
+  title: 'TreinoLab',
   description: 'Registre seus treinos de musculação, acompanhe seu progresso e bata seus recordes pessoais.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Registro de Força',
+    title: 'TreinoLab',
   },
 }
 

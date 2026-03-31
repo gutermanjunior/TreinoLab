@@ -1,4 +1,4 @@
-// Tipos principais do app Registro de Força
+// Tipos principais do app TreinoLab
 
 export interface Exercise {
   id: string

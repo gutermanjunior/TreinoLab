@@ -3,11 +3,11 @@ import { getExerciseById } from './exercises-data'
 
 // Keys do localStorage
 const STORAGE_KEYS = {
-  WORKOUTS: 'registro-forca-workouts',
-  ROUTINES: 'registro-forca-routines',
-  PERSONAL_RECORDS: 'registro-forca-prs',
-  CURRENT_WORKOUT: 'registro-forca-current',
-  SETTINGS: 'registro-forca-settings',
+  WORKOUTS: 'treinolab-workouts',
+  ROUTINES: 'treinolab-routines',
+  PERSONAL_RECORDS: 'treinolab-prs',
+  CURRENT_WORKOUT: 'treinolab-current',
+  SETTINGS: 'treinolab-settings',
 } as const
 
 // Funções de Settings
