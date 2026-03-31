@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Calendar, ChevronDown, ChevronUp, Trash2, Clock, TrendingUp } from 'lucide-react'
+import { useEffect, useState, useRef } from 'react'
+import { Calendar, ChevronDown, ChevronUp, Trash2, Clock, TrendingUp, Upload, Download } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -24,11 +24,14 @@ import { Empty, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui
 import { 
   getWorkouts, 
   deleteWorkout, 
+  importWorkouts,
   formatWorkoutDate, 
   formatDuration,
   calculateWorkoutVolume 
 } from '@/lib/storage'
 import { getExerciseById } from '@/lib/exercises-data'
+import { parseStrengthLogCSV } from '@/lib/csv-parser'
+import { exportToCSV } from '@/lib/csv-exporter'
 import { Workout } from '@/lib/types'
 
 export default function HistoryPage() {
@@ -36,6 +39,7 @@ export default function HistoryPage() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setWorkouts(getWorkouts().filter(w => w.completed))
@@ -48,6 +52,36 @@ export default function HistoryPage() {
       setWorkouts(prev => prev.filter(w => w.id !== deleteId))
       setDeleteId(null)
     }
+  }
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const text = event.target?.result as string
+      if (text) {
+        const imported = parseStrengthLogCSV(text)
+        if (imported.length > 0) {
+          importWorkouts(imported)
+          setWorkouts(getWorkouts().filter(w => w.completed))
+        }
+      }
+    }
+    reader.readAsText(file)
+    // Clear value to allow importing same file again if needed
+    e.target.value = ''
+  }
+
+  const handleExport = () => {
+    const csvText = exportToCSV(workouts)
+    const blob = new Blob([csvText], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `treinolab-historico-${new Date().toISOString().split('T')[0]}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   // Agrupa treinos por mês
@@ -77,11 +111,28 @@ export default function HistoryPage() {
   return (
     <div className="flex flex-col gap-4 p-4">
       {/* Header */}
-      <header className="pt-2">
-        <h1 className="text-2xl font-bold">Histórico</h1>
-        <p className="text-muted-foreground">
-          {workouts.length} treino{workouts.length !== 1 ? 's' : ''} registrado{workouts.length !== 1 ? 's' : ''}
-        </p>
+      <header className="pt-2 flex justify-between items-start">
+        <div>
+          <h1 className="text-2xl font-bold">Histórico</h1>
+          <p className="text-muted-foreground">
+            {workouts.length} treino{workouts.length !== 1 ? 's' : ''} registrado{workouts.length !== 1 ? 's' : ''}
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <input 
+            type="file" 
+            accept=".csv" 
+            ref={fileInputRef} 
+            onChange={handleImport} 
+            className="hidden" 
+          />
+          <Button variant="outline" size="icon" onClick={() => fileInputRef.current?.click()} title="Importar CSV">
+            <Upload className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="icon" onClick={handleExport} title="Exportar CSV">
+            <Download className="h-4 w-4" />
+          </Button>
+        </div>
       </header>
 
       {workouts.length === 0 ? (

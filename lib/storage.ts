@@ -59,6 +59,20 @@ export function saveWorkout(workout: Workout): void {
   localStorage.setItem(STORAGE_KEYS.WORKOUTS, JSON.stringify(workouts))
 }
 
+export function importWorkouts(newWorkouts: Workout[]): void {
+  if (typeof window === 'undefined') return
+  
+  const workouts = getWorkouts()
+  // Append new ones, maybe sort them all
+  const combined = [...workouts, ...newWorkouts]
+  
+  // Deduplicate by ID just in case
+  const uniqueWorkouts = Array.from(new Map(combined.map(w => [w.id, w])).values())
+  uniqueWorkouts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  
+  localStorage.setItem(STORAGE_KEYS.WORKOUTS, JSON.stringify(uniqueWorkouts))
+}
+
 export function deleteWorkout(workoutId: string): void {
   if (typeof window === 'undefined') return
   

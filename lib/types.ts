@@ -36,6 +36,22 @@ export interface WorkoutSet {
   reps: number
   completed: boolean
   isPersonalRecord?: boolean
+  
+  // CSV Support Fields
+  notes?: string
+  isWarmup?: boolean
+  isFail?: boolean
+  isMax?: boolean
+  
+  // Extra metrics
+  bodyweight?: number
+  assistingWeight?: number
+  extraWeight?: number
+  
+  // Cardio metrics
+  distanceKM?: number
+  time?: number
+  calories?: number
 }
 
 export interface WorkoutExercise {
@@ -56,6 +72,12 @@ export interface Workout {
   duration: number // minutos
   completed: boolean
   routineId?: string
+  
+  // CSV Support Fields
+  notes?: string
+  formScore?: number // 1 to 5
+  sleepScore?: number // 1 to 5
+  stressScore?: number // 1 to 5
 }
 
 export interface Routine {

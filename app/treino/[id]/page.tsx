@@ -57,6 +57,12 @@ export default function WorkoutPage() {
   const [selectedGroup, setSelectedGroup] = useState<MuscleGroup | null>(null)
   const [timerOpen, setTimerOpen] = useState(false)
   const [timerDuration, setTimerDuration] = useState(90)
+  
+  // Avaliação Final
+  const [formScore, setFormScore] = useState<number>(0)
+  const [sleepScore, setSleepScore] = useState<number>(0)
+  const [stressScore, setStressScore] = useState<number>(0)
+  const [workoutNotes, setWorkoutNotes] = useState<string>('')
 
   // Calcula tempo decorrido
   const [elapsedTime, setElapsedTime] = useState('0:00')
@@ -93,7 +99,12 @@ export default function WorkoutPage() {
   }
 
   const handleFinishWorkout = () => {
-    const completed = finishWorkout()
+    const completed = finishWorkout({
+      notes: workoutNotes,
+      formScore: formScore || undefined,
+      sleepScore: sleepScore || undefined,
+      stressScore: stressScore || undefined,
+    })
     if (completed) {
       router.push('/')
     }
@@ -297,18 +308,68 @@ export default function WorkoutPage() {
 
       {/* Dialog de finalizar treino */}
       <AlertDialog open={showFinishDialog} onOpenChange={setShowFinishDialog}>
-        <AlertDialogContent>
+        <AlertDialogContent className="max-w-md">
           <AlertDialogHeader>
             <AlertDialogTitle>Finalizar treino?</AlertDialogTitle>
             <AlertDialogDescription>
-              Você completou {completedSets} de {totalSets} séries. 
-              O treino será salvo no seu histórico.
+              Você completou {completedSets} de {totalSets} séries.
             </AlertDialogDescription>
           </AlertDialogHeader>
+          
+          <div className="space-y-5 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Nota do Treino (1-5)</label>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map(n => (
+                  <Button 
+                    key={n} 
+                    variant={formScore === n ? 'default' : 'outline'} 
+                    size="sm" 
+                    onClick={() => setFormScore(n)}
+                    className="flex-1"
+                  >
+                    {n}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground block mb-2">Avaliações Adicionais</label>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-xs font-medium">Sono</label>
+                  <div className="flex gap-1">
+                    {[1, 2, 3, 4, 5].map(n => (
+                      <Button key={n} variant={sleepScore === n ? 'default' : 'outline'} size="icon" className="h-8 w-8 text-xs flex-1" onClick={() => setSleepScore(n)}>{n}</Button>
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-medium">Estresse</label>
+                  <div className="flex gap-1">
+                    {[1, 2, 3, 4, 5].map(n => (
+                      <Button key={n} variant={stressScore === n ? 'default' : 'outline'} size="icon" className="h-8 w-8 text-xs flex-1" onClick={() => setStressScore(n)}>{n}</Button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Anotações Gerais</label>
+              <Input 
+                placeholder="Como foi o desempenho hoje?" 
+                value={workoutNotes} 
+                onChange={(e) => setWorkoutNotes(e.target.value)} 
+              />
+            </div>
+          </div>
+
           <AlertDialogFooter>
-            <AlertDialogCancel>Continuar treinando</AlertDialogCancel>
+            <AlertDialogCancel>Voltar</AlertDialogCancel>
             <AlertDialogAction onClick={handleFinishWorkout}>
-              Finalizar
+              Salvar Treino
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

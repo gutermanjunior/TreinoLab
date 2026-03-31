@@ -207,7 +207,7 @@ export function useWorkout() {
   }, [])
 
   // Finaliza o treino
-  const finishWorkout = useCallback(() => {
+  const finishWorkout = useCallback((metadata?: { notes?: string, formScore?: number, sleepScore?: number, stressScore?: number }) => {
     if (!workout) return null
     
     const endTime = new Date()
@@ -219,6 +219,7 @@ export function useWorkout() {
       endTime: endTime.toISOString(),
       duration,
       completed: true,
+      ...metadata,
     }
     
     saveWorkout(completedWorkout)

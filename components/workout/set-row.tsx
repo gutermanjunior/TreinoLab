@@ -1,9 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Check, Trophy, Trash2 } from 'lucide-react'
+import { Check, Trophy, Trash2, MoreVertical, Flame, AlertCircle, Quote } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { WorkoutSet } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
@@ -62,6 +70,17 @@ export function SetRow({
     }
   }
 
+  const toggleWarmup = () => onUpdate({ isWarmup: !set.isWarmup, isFail: false })
+  const toggleFail = () => onUpdate({ isFail: !set.isFail, isWarmup: false })
+  const toggleMax = () => onUpdate({ isMax: !set.isMax })
+  
+  const handleNotes = () => {
+    const text = window.prompt('Adicionar um comentário para a série:', set.notes || '')
+    if (text !== null) {
+      onUpdate({ notes: text })
+    }
+  }
+
   const canComplete = (parseFloat(weight) || 0) > 0 && (parseInt(reps) || 0) > 0
 
   return (
@@ -69,14 +88,26 @@ export function SetRow({
       'flex items-center gap-2 rounded-lg p-2 transition-colors',
       set.completed && 'bg-muted/50'
     )}>
-      {/* Número da série */}
+      {/* Número da série ou Icone Especial */}
       <div className={cn(
         'flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-medium',
         set.completed 
           ? 'bg-primary text-primary-foreground' 
-          : 'bg-muted text-muted-foreground'
+          : set.isWarmup
+            ? 'bg-orange-500/20 text-orange-500'
+            : set.isFail
+              ? 'bg-red-500/20 text-red-500'
+              : 'bg-muted text-muted-foreground'
       )}>
-        {set.completed ? <Check className="h-4 w-4" /> : setNumber}
+        {set.completed ? (
+          <Check className="h-4 w-4" />
+        ) : set.isWarmup ? (
+          <Flame className="h-4 w-4" />
+        ) : set.isFail ? (
+          <AlertCircle className="h-4 w-4" />
+        ) : (
+          setNumber
+        )}
       </div>
 
       {/* Série anterior (placeholder) */}
@@ -145,16 +176,57 @@ export function SetRow({
         </Button>
       )}
 
-      {/* Botão de remover */}
-      {showRemove && !set.completed && (
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onRemove}
-          className="h-10 w-10 shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+      {/* Botões extras / Dropdown */}
+      {!set.completed && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-10 w-10 shrink-0">
+              <MoreVertical className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuCheckboxItem
+              checked={set.isWarmup}
+              onCheckedChange={toggleWarmup}
+            >
+              <Flame className="mr-2 h-4 w-4 text-orange-500" />
+              Série de Aquecimento
+            </DropdownMenuCheckboxItem>
+            
+            <DropdownMenuCheckboxItem
+              checked={set.isFail}
+              onCheckedChange={toggleFail}
+            >
+              <AlertCircle className="mr-2 h-4 w-4 text-red-500" />
+              Série até a Falha
+            </DropdownMenuCheckboxItem>
+
+            <DropdownMenuCheckboxItem
+              checked={set.isMax}
+              onCheckedChange={toggleMax}
+            >
+              <Trophy className="mr-2 h-4 w-4 text-yellow-500" />
+              Tentativa de PR (Max)
+            </DropdownMenuCheckboxItem>
+
+            <DropdownMenuSeparator />
+            
+            <DropdownMenuItem onClick={handleNotes}>
+              <Quote className="mr-2 h-4 w-4" />
+              {set.notes ? 'Editar Comentário' : 'Adicionar Comentário'}
+            </DropdownMenuItem>
+
+            {showRemove && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={onRemove} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Deletar Série
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
     </div>
   )
